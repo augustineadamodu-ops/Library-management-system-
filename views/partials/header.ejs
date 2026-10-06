@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> · Library Management System</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a href="/books" class="brand">📚 LibrarySys</a>
+    <nav class="nav-links">
+      <a href="/books">Catalog</a>
+      <% if (currentUser) { %>
+        <% if (currentUser.role === 'member') { %>
+          <a href="/loans/my-loans">My Loans</a>
+        <% } %>
+        <% if (currentUser.role === 'admin') { %>
+          <a href="/admin/dashboard">Dashboard</a>
+          <a href="/loans">All Loans</a>
+          <a href="/books/new">Add Book</a>
+        <% } %>
+        <span class="user-pill"><%= currentUser.name %> (<%= currentUser.role %>)</span>
+        <form action="/auth/logout" method="POST" class="inline-form">
+          <button type="submit" class="link-button">Logout</button>
+        </form>
+      <% } else { %>
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register" class="btn-small">Sign Up</a>
+      <% } %>
+    </nav>
+  </header>
+  <main class="container">

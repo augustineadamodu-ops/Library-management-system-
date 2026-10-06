@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+
+<h1>My Loans</h1>
+
+<% if (loans.length === 0) { %>
+  <p class="empty-state">You haven't borrowed any books yet. <a href="/books">Browse the catalog</a>.</p>
+<% } else { %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Book</th>
+        <th>Borrowed</th>
+        <th>Due</th>
+        <th>Status</th>
+        <th>Fine</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% loans.forEach(loan => { %>
+        <tr class="<%= loan.isOverdue ? 'row-overdue' : '' %>">
+          <td><%= loan.book_title %> <span class="muted">by <%= loan.book_author %></span></td>
+          <td><%= new Date(loan.borrowed_at).toLocaleDateString() %></td>
+          <td><%= new Date(loan.due_at).toLocaleDateString() %></td>
+          <td>
+            <% if (loan.status === 'returned') { %>
+              <span class="status-pill">Returned</span>
+            <% } else if (loan.isOverdue) { %>
+              <span class="status-pill unavailable">Overdue</span>
+            <% } else { %>
+              <span class="status-pill info">Borrowed</span>
+            <% } %>
+          </td>
+          <td><%= loan.currentFine > 0 ? '₦' + loan.currentFine : '—' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+
+<div class="card narrow">
+  <h1>Create Account</h1>
+  <% if (error) { %><p class="alert"><%= error %></p><% } %>
+  <form action="/auth/register" method="POST" class="form-stack">
+    <label>Full Name
+      <input type="text" name="name" value="<%= typeof name !== 'undefined' ? name : '' %>" required autofocus />
+    </label>
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
+    <label>Password
+      <input type="password" name="password" required minlength="6" />
+    </label>
+    <label>Confirm Password
+      <input type="password" name="confirmPassword" required minlength="6" />
+    </label>
+    <button type="submit" class="btn">Create Account</button>
+  </form>
+  <p class="form-footnote">Already have an account? <a href="/auth/login">Login</a></p>
+</div>
+
+<%- include('../partials/footer') %>

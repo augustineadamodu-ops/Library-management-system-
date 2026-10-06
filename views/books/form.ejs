@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<div class="card narrow">
+  <h1><%= title %></h1>
+  <% if (error) { %><p class="alert"><%= error %></p><% } %>
+
+  <form
+    action="<%= book && book.id ? '/books/' + book.id : '/books' %>"
+    method="POST"
+    class="form-stack"
+  >
+    <% if (book && book.id) { %><input type="hidden" name="_method" value="PUT" /><% } %>
+    <label>Title
+      <input type="text" name="title" value="<%= book ? book.title : '' %>" required autofocus />
+    </label>
+    <label>Author
+      <input type="text" name="author" value="<%= book ? book.author : '' %>" required />
+    </label>
+    <label>Genre
+      <input type="text" name="genre" value="<%= book ? (book.genre || '') : '' %>" />
+    </label>
+    <label>ISBN
+      <input type="text" name="isbn" value="<%= book ? (book.isbn || '') : '' %>" />
+    </label>
+    <label>Total Copies
+      <input type="number" name="total_copies" min="1" value="<%= book ? book.total_copies : 1 %>" required />
+    </label>
+    <button type="submit" class="btn"><%= book && book.id ? 'Save Changes' : 'Add Book' %></button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

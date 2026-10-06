@@ -1,0 +1,53 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <h1>Book Catalog</h1>
+  <form action="/books" method="GET" class="search-form">
+    <input type="text" name="q" placeholder="Search by title, author, or genre..." value="<%= q %>" />
+    <button type="submit" class="btn-small">Search</button>
+    <% if (q) { %><a href="/books" class="clear-link">Clear</a><% } %>
+  </form>
+</div>
+
+<% if (books.length === 0) { %>
+  <p class="empty-state">No books found<% if (q) { %> for "<%= q %>"<% } %>.</p>
+<% } else { %>
+  <div class="book-grid">
+    <% books.forEach(book => { %>
+      <div class="book-card">
+        <h3><%= book.title %></h3>
+        <p class="book-author">by <%= book.author %></p>
+        <% if (book.genre) { %><span class="tag"><%= book.genre %></span><% } %>
+        <p class="book-meta">
+          <%= book.available_copies %> of <%= book.total_copies %> copies available
+        </p>
+
+        <div class="card-actions">
+          <% if (currentUser && currentUser.role === 'member') { %>
+            <% if (activeLoanBookIds.has(book.id)) { %>
+              <span class="status-pill">Already Borrowed</span>
+            <% } else if (book.available_copies > 0) { %>
+              <form action="/loans/borrow/<%= book.id %>" method="POST">
+                <button type="submit" class="btn-small">Borrow</button>
+              </form>
+            <% } else { %>
+              <span class="status-pill unavailable">Unavailable</span>
+            <% } %>
+          <% } else if (!currentUser) { %>
+            <a href="/auth/login" class="btn-small">Login to Borrow</a>
+          <% } %>
+
+          <% if (currentUser && currentUser.role === 'admin') { %>
+            <a href="/books/<%= book.id %>/edit" class="btn-small secondary">Edit</a>
+            <form action="/books/<%= book.id %>" method="POST" onsubmit="return confirm('Delete this book?');">
+              <input type="hidden" name="_method" value="DELETE" />
+              <button type="submit" class="btn-small danger">Delete</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

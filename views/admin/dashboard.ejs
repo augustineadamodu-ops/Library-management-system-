@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<h1>Admin Dashboard</h1>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-value"><%= stats.totalTitles %></span>
+    <span class="stat-label">Book Titles</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value"><%= stats.availableCopies %>/<%= stats.totalBooks %></span>
+    <span class="stat-label">Copies Available</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value"><%= stats.activeMembers %></span>
+    <span class="stat-label">Registered Members</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value"><%= stats.activeLoans %></span>
+    <span class="stat-label">Active Loans</span>
+  </div>
+  <div class="stat-card <%= stats.overdueLoans > 0 ? 'stat-alert' : '' %>">
+    <span class="stat-value"><%= stats.overdueLoans %></span>
+    <span class="stat-label">Overdue Loans</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value">₦<%= stats.finesCollected %></span>
+    <span class="stat-label">Fines Collected</span>
+  </div>
+</div>
+
+<h2>Most Borrowed Books</h2>
+<% if (mostBorrowed.length === 0) { %>
+  <p class="empty-state">No loan activity yet.</p>
+<% } else { %>
+  <table class="data-table">
+    <thead>
+      <tr><th>Title</th><th>Author</th><th>Times Borrowed</th></tr>
+    </thead>
+    <tbody>
+      <% mostBorrowed.forEach(b => { %>
+        <tr>
+          <td><%= b.title %></td>
+          <td><%= b.author %></td>
+          <td><%= b.times_borrowed %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('../partials/footer') %>
